@@ -1,0 +1,495 @@
+Pandas
+    We do not use numpy directly. We need libraries built on top of numpy. Pandas is one of them.
+    Pandas is the mostly used library in data science.
+
+Features:
+    a) It the commonly used and most important library in data science.
+    b) It is free and open source. (You can download the source code and customize it according to your own requirements.)
+    c) It is built on top of numpy.
+    d) It allows fast data analysis, data cleaning/manipulation.
+    e) It can be used to work with various kinds of data sources like text files, json files, csv files, excel files, etc
+    f) Data manipulation can be done very efficiently with less code and less time.
+
+Code Base for pandas: https://github.com/pandas-dev/pandas
+Official Documentation: https://pandas.pydata.org/
+
+Install Pandas:
+    a) pandas can be installed using pip. (pip install pandas)
+    b) Pandas comes with anaconda.
+
+Data Structures in Pandas:
+    a) Series       b) DataFrames
+
+
+a) Series
+    It is one of the data structures in Pandas.
+    It is 1D array (sequence of values associated with index/labels.)
+
+    NOTE: In pandas index and label means the same thing.
+
+
+Creation of Series using list/tuple
+
+    example using integer list:
+        import pandas as pd
+        l = [1,2,3,4,5]
+        s = pd.Series(l)
+        print(s)=
+
+        If no index/label is given, pandas will automatically generate indexed labels with integer values that
+        starts from 0.
+
+    example using string list
+     import pandas as pd
+        l = ['a','b','c']
+        s = pd.Series(l)
+        print(s)
+
+
+
+Creation of Series using dictionary
+
+    import pandas as pd
+    books_dict = {'first': 'Python', 'second': 'Java', 'third': 'C#'}
+    s = pd.Series(books_dict)
+
+    print(s)
+
+    The key of the dictionary becomes the labes of the series.
+
+
+Customize Index
+
+        import pandas as pd
+        l = [1,2,3]
+        s = pd.Series(l, index=['a','b','c'])
+        print(s)
+
+        NOTE: The index numbers shoule be same as the number of values in the data parameter.
+
+
+NOTE:
+    If the data type is dictionary, then only the matched index will be extracted.
+
+        example:
+            import pandas as pd
+            books_dict = {'first': 'Python', 'second': 'Java', 'third': 'C#'}
+            s = pd.Series(books_dict, index=['first', 'second'])
+
+            print(s)
+
+
+Series Constructor Parameters
+
+    help(pd.Series)
+
+    data => the data to store in pandas series
+    index => it can be used to customize the index. Index need not be unique. If no index provided, pandas creates index by default.
+        example of duplicate index:
+
+        import pandas as pd
+        l = ['python','java','c#']
+        s = pd.Series(data=l,index=['a','a','c']s
+        print(s)
+
+    dtype => output series data type.
+        import pandas as pd
+        l = [1,2,3,4]
+        s = pd.Series(l, dtype='float')
+        print(s)
+
+    name =>  used to assign name to the series. The default name is None.
+        example
+            import pandas as pd
+            l = [1,2,3,4,5]
+            s = pd.Series(l, name='My lucky no')
+            print(s)
+
+Copy vs View
+    When we perform some operations like slicing, changing the values on numpy array/ pandas DataFrames, we can do it in two ways:
+        i)making views   ii) making copy
+
+        If you make views of an array, changes made to the new array will also effect the original array.
+        If you make copy of an array, chanages made to the new array will not effect the original array.
+
+        Copy is the copy of the original array and it is stored in different memory location.
+        Basically copy is like creating a new array.
+
+        View is just the view of the original array.
+        View has the same memory location as the original array.
+
+
+Access Values from Series Using head() and tail() function
+
+    a) head()
+        s = pd.Series(range(100))
+        s.head(10)  ----> returns first 10 values
+        s.head()    ----> returns first 5 values by default
+        s.head(-10) ----> returns all values except last 10 values i.e first 90 values
+
+    b) tail()
+        s = pd.Series(range(100))
+        s.tail(10) ---->  returns last 10 values
+        s.tail()    ----> returns last 5 values by default
+        s.head(-10) ----> returns all values except first 10 rows i.e last 90 rows
+
+
+        help(pd.Series().head) or go to documentation online.
+
+
+Acess Values using
+    a) Index Based Selection    b) Label Based Selection    c) get() method (both label and index can be used)
+
+    a) Index Based Selection
+        syntax example:  s[5]
+                         s[[1,3,5]]
+                         s[3:5]
+
+        code example:
+            s = pd.Series(list('abcdefghijkl'))
+
+            s[0]  ----> returns element at 0th index
+            s[5]  ----> returns element at 5th index
+            s[[1,5,8]] --> returns elements at 1st, 5th, and 8th index
+            s[1:5]     --> returns elements from 1st index to 4th index (5th index is exclusive.)
+
+
+        Excercise: a) how to get every other elements  ---> s[: : 2]
+                   b) how to get last element          ---> s[len(s) - 1]
+                   c) how to get first 5 elements      ---> s[0:5]
+                   d) how to get last 5 elements       ---> s[-5:]
+
+
+    b) Label Based Selection
+        syntax example:
+                s['label']
+                s[['label1', 'label2', 'label5']]
+                s['label3': 'label5']
+
+        code example:
+            s = pd.Series(['ram', 'shyam', 'hari', 'sita', 'gita'], index=['first', 'second', 'third', 'fourth', 'fifth'])
+
+            s['first']  ---> ram
+            s['fifth']  ---> gita
+            s[['first', 'third, 'fourth']]   ---> ram, hari, sita
+            s['second': 'fourth']  ------> shyam, hari, sita
+
+            NOTE: a) In case of label based indexing, last label is inclusive.
+                  b) Everything in between and including second and fourth is included. Aplabetical order does not matter.
+
+    c) get() method
+        In case of index and label based indexing, if the specified index/label is not found, we get an error.
+        In case of get() method, if the specified index/label is not found we get None by default. We can also set the default value is the index is not found.
+
+        get() method can be used for both index and label based selection.
+
+        syntax: s.get(0)   ---> returns element at 0th index.
+                s.get([1,3,5])  ---> returns element at 1st, 3rd and 5th index.
+                s.get('label5') ---> returns element with label5 as its label.
+                s.get(['label3', 'label6'])   ---> returns element with label3 and label6 as its label
+
+                NOTE: Slicing is not possible using get() method
+
+                default value:
+                    s.get(0, defaualt='NO VALUE')
+                    s.get(['label3', 'label6'], default='NO VALUE')
+
+
+Access Values using
+    a) iloc indexer
+    b) loc[]
+
+
+    a) iloc(integer location) indexer
+        iloc is used for index based selection
+
+        syntax: s.iloc[0]
+                s.iloc[[1,4,6]]
+                s.iloc[2:6]
+
+        code example:
+            s = pd.Series([10,20,30,40,50,60,70,80,90])
+
+            s.iloc[0]   ---> returns 10
+            s.iloc[[1,3,5]]   ---> 20,40,60
+            s.iloc[2:6]   ---> 30,40,50,60
+
+
+            Question: which one is faster s[0] or s.iloc[0]?
+                s.iloc[0] is faster since iloc expects only index not label.
+                in case of s[x], x can either be label or index. so pandas has to check if x is index or label before processing.
+                in iloc, pandas can process directly with out checking anything. so iloc is faster.
+
+    b) loc indexer
+        loc is used for label based selection
+            syntax: s.loc['label']
+                    s.loc[['label1', 'label2', 'label3', 'label4']]
+                    s.loc['label2' : 'label5']
+
+            code example:
+                s = pd.Series('ram', 'shyam', 'hari', 'rita', 'sita', index=['A', 'B', 'C', 'D', 'E'])
+
+                s.loc['A']   ---> ram
+                s.loc[['A', 'C']]   ---> ram, hari
+                s.loc['B': 'D']   ---> shyam, hari, rita
+
+
+Series object attributes/properties
+    s = pd.Series([10,20,30,40,50,60,70,80])
+
+    shape, size, index, ndim, dtype, empty
+
+Using Python's inbuilt function in Pandas series object.
+
+    s = pd.Series([1,2,3,4,5,6,7,8,9,10])
+    print(len(s))
+    print(list(s))
+    print(type(s))
+    print(sorted(s))
+    print(max(s))
+    print(min(s))
+    print(sum(s))
+
+NOTE: Python dict has unique keys whereas series key/label are not unique.
+
+
+Create a Series object from csv file.
+
+    read_csv() method is used to read csv files in pandas.
+    read_csv() method returns DataFrames by default. But if the data contains only one row we can convert it into series using squeeze=True.
+
+
+    Suppose myfile.csv file data is
+
+    name,marks
+    'ram',60
+    'shyam',26
+    'hari',63
+    'sita',52
+    'gita',35
+
+    s = pd.read_csv('abc.csv', usecols=['name'], squeeze=True)
+    print(type(s))
+
+count() method
+    It returns the number of non-Null/NA values from the series.
+
+    In python missing data such as blank data, NA, NAN, None etc are treated as NAN.
+    csv file does not treat None as missing data, but python list does.
+
+    s.size() returns the total number of values including missing data(NA,NAN,None)
+    s.count() ignored NA,NAN,None
+
+
+Drop NAs
+    dropna() method is used to drop/remove rows with missing data.
+    dropna() returns a new series with missing values removed. hence the original series remains untouched/unchanged.
+
+    s = pd.read_csv('abc.csv', usecols=['marks'], squeeze=True)
+    s1 = s.dropna()
+    print(s1)
+
+    if you want to modify the original series i.e s in our case, we need to pass arguments inplace=True
+    s = pd.read_csv('abc.csv', usecols=['marks'], squeeze=True)
+    s.dropna(inplace=True)
+    print(s)
+
+Fill NAs with our desired/required values.
+
+    fillna() is used to replace NA values with our desired values.
+    It returns a new series object which means the original series remains unchanged.
+    To modify the original series, we need to pass inplace=True
+
+    s = pd.read_csv('abc.csv', usecols=['marks'], squeeze=True)
+    s1 = s.fillna(0)
+    print(s) --> s remains unchanged
+    print(s1) --> NAs are replaced with 0
+
+
+
+    s = pd.read_csv('abc.csv', usecols=['marks'], squeeze=True)
+    s.fillna(0, inplace=True)
+    print(s) --> original series is changed and the missing values are filled with 0
+
+
+Statistical Functions for Pandas Series
+
+sum()  min()   max()   mean()  median()  var()   std()     mode()  describe()
+
+
+Find Index Label associated with max and min value
+
+a) idxmax()   b) idxmin()
+
+a) idxmax()
+    returns index label associated with max value
+    s = pd.Series([1,10,15,20], index=['a','b','c','d'])
+    print(s.idxmax())  ----> d
+
+b) idxmin()
+    returns index label associated with min value
+    print(s.idxmin()) ---> a
+
+
+Finding first n largest and smallest values
+
+a) nlargest()    b) nsmallest()
+
+a) nlargest()
+    returns first n largest elements
+    s.nlargest(5)
+
+b) nsmallest()
+    returns first n smallest elements
+    s.nsmallest(4)
+
+    NOTE: values are not sorted while using nlargest() or nsmallest()
+
+
+Sorting Values based on index
+    a) sort_values()---> sorts only values but not labels
+        s.sort_values()
+
+
+Sorting Values based on label
+    a) sort_index()---> exactly as sort_values() except it sorts by index.
+        s.label()
+
+
+Arithmetic Operations for Series Objects
+
+1) Arithmetic operations using Scalar values
+    scalar means constant values.
+
+    s = pd.Series([2,4,6,8])
+    print(s + 10)  ---> 10 is added to every values in s
+
+    print(s / 2)   ---> all values are divided by 2
+
+    NOTE: Any operations performed on NAN results NAN as output.
+
+    s = pd.Series([1,2,3,4, pd.NA, None])
+    print(s + 1)
+
+2) Arithmetic operations between series objects.
+
+    Arithmetic operations is performed on matched indexes only. Unmatched indexes results NAN.
+
+    s1 = pd.Series([1,2,3])
+    s2 = pd.Series([1,2,3,4,5,6])
+    print(s1 + s2)
+
+    To overcome the issue of getting NAN for unmatched indexes we can use pandas inbuilt methods like
+    add(),    sub(),   mul(),   div() and use fill_value parameter
+
+
+    example:
+        s1 = pd.Series([1,2,3])
+        s2 = pd.Series([1,2,3,4,5,6])
+        print(s1.add(s2, fill_value=0))
+
+
+Iterating over Series object
+
+    for i in s.index:
+        print(i)  ----> prints index only
+
+    for i in s.index:
+        print(s[i])  ---> prints values only
+
+    for i,v in s.items():
+        print(i,v)      ---> prints both index and values
+
+
+DataFrames
+    Dataframe is a labeled 2D array.
+    It is a collection rows and columns (like table)
+
+    Each column of Dataframe acts as a series. So we could say that Dataframe is a collection of series objects.
+    DataFrames can have many columns and each column can have values of different data types. So Dataframe is not heterogenous.
+
+    Read documentation on how to create pandas Dataframe
+
+    read_csv() in Dataframe.
+        read_csv() always returns Dataframe object by default.
+
+    info()   sample()  head()    tail()
+
+
+    attributes
+        axes   columns shape size ndim
+
+
+Select desired column from Dataframe
+    df = pd.read_csv('abc.csv)
+    df.column_name   or df['column_name']  (preferred and useful when there is space in column name)
+
+Select multiple desired columns from Dataframe
+    df[['name', 'age']]
+
+
+Add a new columns to Dataframe object
+
+    First Way:
+        df[column_name] = 'Hello World'
+            if the column_name already exists, it will replace all the values of the column with 'Hello World'
+            if the column_name does not exists, it will create a new column with values 'Hello World'
+
+        df[column_name] = ['a','b','c','d']
+
+    Second Way using insert():
+        df.insert()
+            The main advantage of using insert() is we could choose the loction index of the column.
+
+
+Drop/remove values using dropna() method
+    dropna() removes rows from Dataframe where as least one value is missing i.e NAN value.
+
+    df.dropna()
+
+FIll NAN values with desired values using fillna() method
+
+    df.fillna(0) ---> filles every NAN values with 0
+
+    PROBLEM: The above code also fills columns with other data types values than it with 0 which does not make sense.
+
+    SOLUTION:
+        df['name'] = df['name'].fillna('No name')
+        OR           df['name'].fillna('No name' inplace=True)
+
+
+
+astype() method
+    Need of astype() method:
+        In pandas NAN is treated as float. Suppose, we have a column named age where one value is missing. Since there is a NAN value present in the
+        column all the other int values are converted into float data type which is a waste of memory.
+        Even when we drop the NAN values using dropna() method, the data type is still float.
+
+        we can solve this problem by using astype()
+
+        astype() helps to improve memory utilization.
+
+        df['age'].dropna(inplace=True)
+        df['age'].astype('int')
+
+interpolate()
+
+sort_values()
+sort_index()
+
+iat at
+
+basic stats functions min max mean mode std ....
+
+
+
+conditional isin
+
+
+
+
+
+
+
+
+
